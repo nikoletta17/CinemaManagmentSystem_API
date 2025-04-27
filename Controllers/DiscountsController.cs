@@ -1,4 +1,5 @@
 ﻿using Cinema_ManagementSystem.Data;
+using CinemaManagementSystem.DTOs;
 using CinemaManagementSystem.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -31,35 +32,23 @@ namespace Cinema_ManagementSystem.Controllers
             return discount == null ? NotFound() : Ok(discount);
         }
 
-        // PUT: api/Discounts/idNumber
+        // PUT: api/Discounts/{id}
         [HttpPut("{id}")]
-        public IActionResult PutDiscount(int id, Discount discount)
+        public ActionResult PutDiscount(int id, DiscountDto discountDto)
         {
-            if (id != discount.Id)
-            {
-                return BadRequest();
-            }
+            var discount = _context.Discounts.Find(id);
+            if (discount == null)
+                return NotFound($"Знижку з ID {id} не знайдено.");
 
-            _context.Entry(discount).State = EntityState.Modified;
+            // Оновлюємо тільки потрібні поля
+            discount.Description = discountDto.Description;
+            discount.Percentage = discountDto.Percentage;
 
-            try
-            {
-                _context.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DiscountExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _context.SaveChanges();
 
             return NoContent();
         }
+
 
         private bool DiscountExists(int id)
         {
@@ -68,13 +57,20 @@ namespace Cinema_ManagementSystem.Controllers
 
         // POST: api/Discounts
         [HttpPost]
-        public ActionResult<Discount> PostDiscount(Discount discount)
+        public ActionResult<Discount> PostDiscount(DiscountDto discountDto)
         {
+            var discount = new Discount
+            {
+                Description = discountDto.Description,
+                Percentage = discountDto.Percentage
+            };
+
             _context.Discounts.Add(discount);
             _context.SaveChanges();
 
             return CreatedAtAction(nameof(GetDiscount), new { id = discount.Id }, discount);
         }
+
 
         // DELETE: api/Discounts/idNumber
         [HttpDelete("{id}")]

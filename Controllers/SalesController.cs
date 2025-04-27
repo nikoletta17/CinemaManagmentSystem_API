@@ -1,4 +1,5 @@
 ﻿using Cinema_ManagementSystem.Data;
+using CinemaManagementSystem.DTOs;
 using CinemaManagementSystem.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,44 +18,36 @@ namespace CinemaManagmentSystem_API.Controllers
             _context = context;
         }
 
-        // GET: api/Sales
+        //GET: api/Sales
         [HttpGet]
         public ActionResult<IEnumerable<Sale>> GetSales()
         {
-            return Ok(_context.Sales.Include(s => s.User).Include(s => s.Discount).ToList());
+            return Ok(_context.Sales.ToList());
         }
 
-        // GET: api/Sales/idNumber
+        //GET: api/Sales/idNumber
         [HttpGet("{id}")]
         public ActionResult<Sale> GetSale(int id)
         {
-            var sale = _context.Sales.Include(s => s.User).Include(s => s.Discount).FirstOrDefault(s => s.Id == id);
+            var sale = _context.Sales.Find(id);
             return sale == null ? NotFound() : Ok(sale);
         }
 
         // PUT: api/Sales/idNumber
         [HttpPut("{id}")]
-        public ActionResult PutSale(int id, Sale sale)
+        public ActionResult PutSale(int id, SaleDto saleDto)
         {
-            if (id != sale.Id)
-                return BadRequest();
+            var sale = _context.Sales.Find(id);
+            if (sale == null)
+                return NotFound();
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState); // Перевірка на валідність моделі
+            sale.TicketsCount = saleDto.TicketsCount;
+            sale.TotalAmount = saleDto.TotalAmount;
+            sale.PurchaseDate = saleDto.PurchaseDate;
+            sale.DiscountId = saleDto.DiscountId;
+            sale.UserId = saleDto.UserId;
 
-            _context.Entry(sale).State = EntityState.Modified;
-            try
-            {
-                _context.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SaleExists(id))
-                    return NotFound();
-
-                throw;
-            }
-
+            _context.SaveChanges();
             return NoContent();
         }
 
@@ -65,15 +58,22 @@ namespace CinemaManagmentSystem_API.Controllers
 
         // POST: api/Sales
         [HttpPost]
-        public ActionResult<Sale> PostSale(Sale sale)
+        public ActionResult<Sale> PostSale(SaleDto saleDto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState); // Перевірка на валідність моделі
+            var sale = new Sale
+            {
+                TicketsCount = saleDto.TicketsCount,
+                TotalAmount = saleDto.TotalAmount,
+                PurchaseDate = saleDto.PurchaseDate,
+                DiscountId = saleDto.DiscountId,
+                UserId = saleDto.UserId
+            };
 
             _context.Sales.Add(sale);
             _context.SaveChanges();
             return CreatedAtAction(nameof(GetSale), new { id = sale.Id }, sale);
         }
+
 
         // DELETE: api/Sales/idNumber
         [HttpDelete("{id}")]

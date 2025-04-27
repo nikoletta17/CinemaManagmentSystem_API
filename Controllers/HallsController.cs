@@ -2,6 +2,7 @@
 using CinemaManagementSystem.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using CinemaManagementSystem.DTOs;
 
 namespace CinemaManagmentSystem_API.Controllers
 {
@@ -31,36 +32,22 @@ namespace CinemaManagmentSystem_API.Controllers
             return hall == null ? NotFound() : Ok(hall); // 200 or 404
         }
 
-        // PUT: api/Halls/idNumber
         [HttpPut("{id}")]
-        public ActionResult PutHall(int id, Hall hall)
+        public ActionResult PutHall(int id, HallDto hallDto)
         {
-            if (id != hall.Id)
-                return BadRequest(); // 400
+            var hall = _context.Halls.Find(id);
+            if (hall == null)
+                return NotFound();
 
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState); // Перевірка на валідність моделі
+            hall.HallNumber = hallDto.HallNumber;
+            hall.SeatsCount = hallDto.SeatsCount;
+            hall.HallType = hallDto.HallType;
 
-            _context.Entry(hall).State = EntityState.Modified;
-
-            try
-            {
-                _context.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!HallExists(id))
-                {
-                    return NotFound(); // 404
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent(); // 204
+            _context.SaveChanges();
+            return NoContent();
         }
+
+
 
         private bool HallExists(int id)
         {
@@ -69,16 +56,21 @@ namespace CinemaManagmentSystem_API.Controllers
 
         // POST: api/Halls
         [HttpPost]
-        public ActionResult<Hall> PostHall(Hall hall)
+        public ActionResult<Hall> PostHall(HallDto hallDto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState); // Перевірка на валідність моделі
+            var hall = new Hall
+            {
+                HallNumber = hallDto.HallNumber,
+                SeatsCount = hallDto.SeatsCount,
+                HallType = hallDto.HallType
+            };
 
             _context.Halls.Add(hall);
             _context.SaveChanges();
 
-            return CreatedAtAction(nameof(GetHall), new { id = hall.Id }, hall); // 201
+            return CreatedAtAction(nameof(GetHall), new { id = hall.Id }, hall);
         }
+
 
         // DELETE: api/Halls/idNumber
         [HttpDelete("{id}")]
