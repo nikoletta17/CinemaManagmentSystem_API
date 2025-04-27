@@ -11,7 +11,7 @@ namespace CinemaManagementSystem.Entities
         public int SeatNumber { get; set; }
 
         [Required]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Ціна квитка має бути більше нуля.")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "The ticket price must be greater than zero.")]
         public decimal Price { get; set; }
 
         [Required]

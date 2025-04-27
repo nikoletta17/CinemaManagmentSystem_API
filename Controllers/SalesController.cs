@@ -25,7 +25,7 @@ namespace CinemaManagmentSystem_API.Controllers
             return Ok(_context.Sales.ToList());
         }
 
-        //GET: api/Sales/idNumber
+        //GET: api/Sales/{id}
         [HttpGet("{id}")]
         public ActionResult<Sale> GetSale(int id)
         {
@@ -33,7 +33,7 @@ namespace CinemaManagmentSystem_API.Controllers
             return sale == null ? NotFound() : Ok(sale);
         }
 
-        // PUT: api/Sales/idNumber
+        // PUT: api/Sales/{id}
         [HttpPut("{id}")]
         public ActionResult PutSale(int id, SaleDto saleDto)
         {
@@ -49,11 +49,6 @@ namespace CinemaManagmentSystem_API.Controllers
 
             _context.SaveChanges();
             return NoContent();
-        }
-
-        private bool SaleExists(int id)
-        {
-            return _context.Sales.Any(s => s.Id == id);
         }
 
         // POST: api/Sales
@@ -75,7 +70,7 @@ namespace CinemaManagmentSystem_API.Controllers
         }
 
 
-        // DELETE: api/Sales/idNumber
+        // DELETE: api/Sales/{id}
         [HttpDelete("{id}")]
         public ActionResult DeleteSale(int id)
         {

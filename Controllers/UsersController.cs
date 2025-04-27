@@ -24,7 +24,7 @@ namespace CinemaManagmentSystem_API.Controllers
             return Ok(_context.Users.ToList());
         }
 
-        //GET: api/Users/idNumber
+        //GET: api/Users/{id}
         [HttpGet("{id}")]
         public ActionResult<User> GetUser(int id)
         {
@@ -53,12 +53,6 @@ namespace CinemaManagmentSystem_API.Controllers
             return NoContent();
         }
 
-
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(u => u.Id == id);
-        }
-
         // POST: api/Users
         [HttpPost]
         public ActionResult<User> PostUser(UserDto userDto)
@@ -75,7 +69,6 @@ namespace CinemaManagmentSystem_API.Controllers
             _context.SaveChanges();
             return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
         }
-
 
         // DELETE: api/Users/{id}
         [HttpDelete("{id}")]

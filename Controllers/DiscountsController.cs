@@ -24,7 +24,7 @@ namespace Cinema_ManagementSystem.Controllers
             return _context.Discounts.ToList();
         }
 
-        // GET: api/Discounts/idNumber
+        // GET: api/Discounts/{id}
         [HttpGet("{id}")]
         public ActionResult<Discount> GetDiscount(int id)
         {
@@ -49,12 +49,6 @@ namespace Cinema_ManagementSystem.Controllers
             return NoContent();
         }
 
-
-        private bool DiscountExists(int id)
-        {
-            return _context.Discounts.Any(e => e.Id == id);
-        }
-
         // POST: api/Discounts
         [HttpPost]
         public ActionResult<Discount> PostDiscount(DiscountDto discountDto)
@@ -72,7 +66,7 @@ namespace Cinema_ManagementSystem.Controllers
         }
 
 
-        // DELETE: api/Discounts/idNumber
+        // DELETE: api/Discounts/{id}
         [HttpDelete("{id}")]
         public IActionResult DeleteDiscount(int id)
         {

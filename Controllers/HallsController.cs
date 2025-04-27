@@ -24,7 +24,7 @@ namespace CinemaManagmentSystem_API.Controllers
             return Ok(_context.Halls.ToList()); // 200
         }
 
-        // GET: api/Halls/idNumber
+        // GET: api/Halls/{id}
         [HttpGet("{id}")]
         public ActionResult<Hall> GetHall(int id)
         {
@@ -32,6 +32,7 @@ namespace CinemaManagmentSystem_API.Controllers
             return hall == null ? NotFound() : Ok(hall); // 200 or 404
         }
 
+        // PUT: api/Halls/{id}
         [HttpPut("{id}")]
         public ActionResult PutHall(int id, HallDto hallDto)
         {
@@ -45,13 +46,6 @@ namespace CinemaManagmentSystem_API.Controllers
 
             _context.SaveChanges();
             return NoContent();
-        }
-
-
-
-        private bool HallExists(int id)
-        {
-            return _context.Halls.Any(h => h.Id == id); // Перевірка існування зали
         }
 
         // POST: api/Halls
@@ -71,8 +65,7 @@ namespace CinemaManagmentSystem_API.Controllers
             return CreatedAtAction(nameof(GetHall), new { id = hall.Id }, hall);
         }
 
-
-        // DELETE: api/Halls/idNumber
+        // DELETE: api/Halls/{id}
         [HttpDelete("{id}")]
         public ActionResult DeleteHall(int id)
         {

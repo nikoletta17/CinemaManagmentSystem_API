@@ -24,14 +24,13 @@ namespace CinemaManagmentSystem_API.Controllers
             return Ok(_context.Tickets.ToList());
         }
 
-        //GET: api/Tickets/idNumber
+        //GET: api/Tickets/{id}
         [HttpGet("{id}")]
         public ActionResult<Ticket> GetTicket(int id)
         {
             var ticket = _context.Tickets.Find(id);
             return ticket == null ? NotFound() : Ok(ticket);
         }
-
 
 
         // PUT: api/Tickets/{id}
@@ -55,8 +54,6 @@ namespace CinemaManagmentSystem_API.Controllers
             return NoContent();
         }
 
-
-
         // POST: api/Tickets
         [HttpPost]
         public ActionResult<Ticket> PostTicket(TicketDto ticketDto)
@@ -77,8 +74,6 @@ namespace CinemaManagmentSystem_API.Controllers
             _context.SaveChanges();
             return CreatedAtAction(nameof(GetTicket), new { id = ticket.Id }, ticket);
         }
-
-
 
         // DELETE: api/Tickets/{id}
         [HttpDelete("{id}")]

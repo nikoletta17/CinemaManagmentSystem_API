@@ -25,7 +25,7 @@ namespace CinemaManagmentSystem_API.Controllers
             return Ok(_context.Sessions.ToList());
         }
 
-        //GET: api/Sessions/idNumber
+        //GET: api/Sessions/{id}
         [HttpGet("{id}")]
         public ActionResult<Session> GetSession(int id)
         {
@@ -54,31 +54,6 @@ namespace CinemaManagmentSystem_API.Controllers
             _context.SaveChanges();
 
             return NoContent();
-        }
-
-        //метод, который будет автоматически менять статус всех сеансов, если их время прошло.
-        [HttpPut("update-status")]
-        public ActionResult UpdateSessionsStatus()
-        {
-            var now = DateTime.Now;
-
-            var sessionsToUpdate = _context.Sessions
-                .Where(s => s.DateTime <= now && s.Status == "Scheduled")
-                .ToList();
-
-            foreach (var session in sessionsToUpdate)
-            {
-                session.Status = "Finished";
-            }
-
-            _context.SaveChanges();
-
-            return Ok($"Обновлено {sessionsToUpdate.Count} сеансов.");
-        }
-
-        private bool SessionExists(int id)
-        {
-            return _context.Sessions.Any(s => s.Id == id);
         }
 
         // POST: api/Sessions

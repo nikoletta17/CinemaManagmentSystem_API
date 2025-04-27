@@ -72,8 +72,6 @@ namespace CinemaManagmentSystem_API.Controllers
             return NoContent();
         }
 
-
-
         [HttpDelete("{id}")]
         public ActionResult DeleteMovie(int id)
         {
@@ -84,11 +82,6 @@ namespace CinemaManagmentSystem_API.Controllers
             _context.Movies.Remove(movie);
             _context.SaveChanges();
             return NoContent();
-        }
-
-        private bool MovieExists(int id)
-        {
-            return _context.Movies.Any(m => m.Id == id);
         }
     }
 }

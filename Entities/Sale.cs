@@ -9,11 +9,11 @@ namespace CinemaManagementSystem.Entities
         public int Id { get; set; }
 
         [Required] 
-        [Range(1, int.MaxValue, ErrorMessage = "Кількість квитків повинна бути більше нуля.")]
+        [Range(1, int.MaxValue, ErrorMessage = "The number of tickets must be greater than zero.")]
         public int TicketsCount { get; set; }
 
         [Required] 
-        [Range(0.01, double.MaxValue, ErrorMessage = "Сума повинна бути більше нуля.")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "The sum must be greater than zero.")]
         public decimal TotalAmount { get; set; }
 
         [Required] 
