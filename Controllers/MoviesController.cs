@@ -20,14 +20,14 @@ namespace CinemaManagmentSystem_API.Controllers
             _context = context;
         }
 
-        // GET: api/Halls
+        // GET: api/Movies
         [HttpGet]
         public ActionResult<IEnumerable<Movie>> GetMovies()
         {
             return Ok(_context.Movies.ToList());
         }
 
-        // GET: api/Halls/{id}
+        // GET: api/Movies/{id}
         [HttpGet("{id}")]
         public ActionResult<Movie> GetMovie(int id)
         {
@@ -35,7 +35,7 @@ namespace CinemaManagmentSystem_API.Controllers
             return movie == null ? NotFound() : Ok(movie);
         }
 
-        // POST: api/Halls
+        // POST: api/Movies
         [HttpPost]
         public ActionResult<Movie> PostMovie(MovieDto movieDto)
         {
@@ -56,7 +56,7 @@ namespace CinemaManagmentSystem_API.Controllers
             return CreatedAtAction(nameof(GetMovie), new { id = movie.Id }, movie);
         }
 
-        // PUT: api/Halls/{id}
+        // PUT: api/Movies/{id}
         [HttpPut("{id}")]
         public ActionResult PutMovie(int id, MovieDto movieDto)
         {
@@ -76,7 +76,7 @@ namespace CinemaManagmentSystem_API.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Halls/{id}
+        // DELETE: api/Movies/{id}
         [HttpDelete("{id}")]
         public ActionResult DeleteMovie(int id)
         {
